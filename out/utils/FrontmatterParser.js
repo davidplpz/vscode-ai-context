@@ -50,24 +50,25 @@ function parseYamlBlock(block) {
         if (line.trim() === '' || line.trim().startsWith('#'))
             continue;
         // Check if it's a key-value line (indented or not)
-        const kvMatch = line.match(/^(\s*)([\w-]+):\s*(.*)$/);
+        const kvMatch = line.match(/^(\s*)([\w.-]+):\s*(.*)$/);
         if (!kvMatch)
             continue;
         const indent = kvMatch[1];
         const key = kvMatch[2];
         let value = kvMatch[3].trim();
-        if (value === '') {
-            // Could be a multi-line value with `>` or a nested object
+        if (value === '>') {
+            // Folded block scalar (`>`) — ALWAYS collect indented lines as folded text.
+            // `i` already points to the first continuation line (incremented in while loop).
+            // Must check BEFORE the nested block check, because the continuation lines
+            // look like indented blocks.
+            value = collectFolded(lines, i, indent + '  ');
+        }
+        else if (value === '') {
+            // Could be a nested object or empty value
             if (i < lines.length && lines[i].startsWith(indent + '  ')) {
-                // Nested object
                 const nested = collectNested(lines, i, indent + '  ');
                 i = nested.nextIndex;
                 value = nested.result;
-            }
-            else if (i < lines.length && lines[i].trim() === '>') {
-                // Folded block scalar
-                i++;
-                value = collectFolded(lines, i, indent + '  ');
             }
             // else: empty value
         }

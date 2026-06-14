@@ -1,8 +1,8 @@
 .vscodeignore
-node_modules/
 src/
 tsconfig.json
 .gitignore
 test/
 *.ts
+test-bad-*/
 !out/**/*.js
