@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+out/
+
+# VS Code extension packages
+*.vsix
+
+# Temp test directories
+test-bad-*/
+tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*.swo
+*~

@@ -46,6 +46,12 @@ This extension does not add any user-configurable settings yet.
 
 ## Release Notes
 
+### 0.1.1
+
+- Added Marketplace icon (128×128)
+- Fixed: runtime dependency `jsonc-parser` now included in VSIX
+- Fixed: `.vscodeignore` was incorrectly excluding `node_modules/`
+
 ### 0.1.0
 
 Initial release:
