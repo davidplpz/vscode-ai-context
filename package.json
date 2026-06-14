@@ -1,0 +1,119 @@
+{
+  "name": "vscode-ai-context",
+  "displayName": "AI Context",
+  "description": "Browse and search available AI Skills and Agents for your project",
+  "version": "0.1.0",
+  "publisher": "davidplpz",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidplpz/vscode-ai-context"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "opencode",
+    "ai",
+    "skills",
+    "agents",
+    "context"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:vscodeAiContext.mainTree",
+    "onCommand:vscodeAiContext.searchSkills",
+    "onCommand:vscodeAiContext.refresh",
+    "onCommand:vscodeAiContext.showSkillDetail"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscodeAiContext",
+          "title": "AI Context",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "vscodeAiContext": [
+        {
+          "id": "vscodeAiContext.mainTree",
+          "name": "Skills & Agents",
+          "contextualTitle": "AI Skills & Agents"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "vscodeAiContext.searchSkills",
+        "title": "AI Context: Search Skills & Agents"
+      },
+      {
+        "command": "vscodeAiContext.refresh",
+        "title": "AI Context: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vscodeAiContext.showSkillDetail",
+        "title": "AI Context: Show Skill Detail"
+      },
+      {
+        "command": "vscodeAiContext.openSkillFile",
+        "title": "AI Context: Open Skill File"
+      },
+      {
+        "command": "vscodeAiContext.copySkillContent",
+        "title": "AI Context: Copy Skill Content"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "vscodeAiContext.searchSkills",
+          "when": "view == vscodeAiContext.mainTree",
+          "group": "navigation"
+        },
+        {
+          "command": "vscodeAiContext.refresh",
+          "when": "view == vscodeAiContext.mainTree",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vscodeAiContext.openSkillFile",
+          "when": "view == vscodeAiContext.mainTree && viewItem == skill",
+          "group": "inline"
+        },
+        {
+          "command": "vscodeAiContext.copySkillContent",
+          "when": "view == vscodeAiContext.mainTree && viewItem == skill",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "lint": "echo 'no linter configured yet'",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.5.0",
+    "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
+  }
+}
