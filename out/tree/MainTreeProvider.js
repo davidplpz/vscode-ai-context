@@ -166,8 +166,8 @@ class MainTreeProvider {
             list.push(skill);
             bySource.set(sourceLabel, list);
         }
-        // Sort: Global first, then Proyecto, then rest
-        const order = ['Global', 'Proyecto', 'Ecosistema', 'Usuario'];
+        // Sort: Global first, then Claude, Proyecto, then rest
+        const order = ['Global', 'Claude', 'Proyecto', 'Ecosistema', 'Usuario'];
         const groups = [];
         for (const key of order) {
             const items = bySource.get(key);
@@ -211,6 +211,7 @@ class MainTreeProvider {
         // It's a skill group — map source label to the actual SkillSource
         const sourceMap = {
             Global: 'global',
+            Claude: 'claude',
             Proyecto: 'project',
             Ecosistema: 'ecosystem',
             Usuario: 'user',

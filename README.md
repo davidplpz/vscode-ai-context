@@ -46,6 +46,15 @@ This extension does not add any user-configurable settings yet.
 
 ## Release Notes
 
+### 0.1.3
+
+- Fixed: Marketplace icon now displays correctly (properly centered, visible colors)
+
+### 0.1.2
+
+- Added: Claude Code global skills discovery (`~/.claude/skills/`)
+- Skills from Claude appear under a new "Claude" category in the tree
+
 ### 0.1.1
 
 - Added Marketplace icon (128×128)

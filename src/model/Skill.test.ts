@@ -53,6 +53,7 @@ describe('Skill', () => {
       expect(skillSourceLabel('project')).toBe('Proyecto');
       expect(skillSourceLabel('ecosystem')).toBe('Ecosistema');
       expect(skillSourceLabel('user')).toBe('Usuario');
+      expect(skillSourceLabel('claude')).toBe('Claude');
     });
   });
 });

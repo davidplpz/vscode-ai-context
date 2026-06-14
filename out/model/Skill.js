@@ -39,6 +39,7 @@ function skillSourceLabel(source) {
         project: 'Proyecto',
         ecosystem: 'Ecosistema',
         user: 'Usuario',
+        claude: 'Claude',
     };
     return labels[source];
 }

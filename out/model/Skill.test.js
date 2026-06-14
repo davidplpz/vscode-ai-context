@@ -48,6 +48,7 @@ const Skill_1 = require("./Skill");
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('project')).toBe('Proyecto');
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('ecosystem')).toBe('Ecosistema');
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('user')).toBe('Usuario');
+            (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('claude')).toBe('Claude');
         });
     });
 });

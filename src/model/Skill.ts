@@ -1,7 +1,7 @@
 /**
  * Skill source — where the SKILL.md file lives.
  */
-export type SkillSource = 'global' | 'project' | 'ecosystem' | 'user';
+export type SkillSource = 'global' | 'project' | 'ecosystem' | 'user' | 'claude';
 
 /**
  * A parsed AI Skill from a SKILL.md file.
@@ -78,6 +78,7 @@ export function skillSourceLabel(source: SkillSource): string {
     project: 'Proyecto',
     ecosystem: 'Ecosistema',
     user: 'Usuario',
+    claude: 'Claude',
   };
   return labels[source];
 }

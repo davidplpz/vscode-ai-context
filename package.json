@@ -2,7 +2,7 @@
   "name": "vscode-ai-context",
   "displayName": "AI Context",
   "description": "Browse and search available AI Skills and Agents for your project",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "publisher": "davidplpz",
   "icon": "media/icon-128.png",
   "license": "Apache-2.0",

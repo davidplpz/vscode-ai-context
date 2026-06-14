@@ -154,8 +154,8 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       bySource.set(sourceLabel, list);
     }
 
-    // Sort: Global first, then Proyecto, then rest
-    const order = ['Global', 'Proyecto', 'Ecosistema', 'Usuario'];
+    // Sort: Global first, then Claude, Proyecto, then rest
+    const order = ['Global', 'Claude', 'Proyecto', 'Ecosistema', 'Usuario'];
     const groups: TreeNode[] = [];
 
     for (const key of order) {
@@ -206,6 +206,7 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     // It's a skill group — map source label to the actual SkillSource
     const sourceMap: Record<string, string> = {
       Global: 'global',
+      Claude: 'claude',
       Proyecto: 'project',
       Ecosistema: 'ecosystem',
       Usuario: 'user',

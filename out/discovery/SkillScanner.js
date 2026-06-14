@@ -54,6 +54,8 @@ function scanAllSkills(projectRoot) {
         { dir: path.join(home, '.opencode', 'skills'), source: 'user' },
         // Global skills (from opencode config)
         { dir: path.join(home, '.config', 'opencode', 'skills'), source: 'global' },
+        // Claude Code global skills
+        { dir: path.join(home, '.claude', 'skills'), source: 'claude' },
     ];
     // Project-specific skills
     if (projectRoot) {
