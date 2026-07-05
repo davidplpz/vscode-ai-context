@@ -2,8 +2,10 @@ import * as vscode from 'vscode';
 import { TreeNode, toTreeItem } from './TreeNode';
 import { Skill, skillSourceLabel } from '../model/Skill';
 import { Agent } from '../model/Agent';
+import { ClaudeSettingsFile } from '../model/ClaudeSettings';
 import { scanAllSkills } from '../discovery/SkillScanner';
 import { resolveAllAgents } from '../discovery/AgentResolver';
+import { resolveClaudeSettings } from '../discovery/ClaudeSettingsResolver';
 import { detectProject } from '../discovery/ProjectDetector';
 
 /**
@@ -15,6 +17,7 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   private skills: Skill[] = [];
   private agents: Agent[] = [];
+  private claudeSettings: ClaudeSettingsFile[] = [];
   private projectRoot?: string;
 
   constructor() {
@@ -28,8 +31,8 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const project = detectProject();
     this.projectRoot = project?.rootPath;
 
-    // Only scan if project has opencode or we want global context
     this.skills = scanAllSkills(this.projectRoot);
+    this.claudeSettings = resolveClaudeSettings(this.projectRoot);
     this.agents = resolveAllAgents({
       projectConfigPath: project?.configPath,
       includeHidden: false, // Skip hidden agents by default
@@ -101,10 +104,16 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   private buildCategories(): TreeNode[] {
-    return [
+    const categories: TreeNode[] = [
       { kind: 'category', label: '🤖 Agents', icon: 'robot' },
       { kind: 'category', label: '⚡ Skills', icon: 'light-bulb' },
     ];
+
+    if (this.claudeSettings.length > 0) {
+      categories.push({ kind: 'category', label: '⚙️ Config', icon: 'gear' });
+    }
+
+    return categories;
   }
 
   private buildCategoryChildren(category: TreeNode & { kind: 'category' }): TreeNode[] {
@@ -114,7 +123,18 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     if (category.label.includes('Skill')) {
       return this.buildSkillGroups();
     }
+    if (category.label.includes('Config')) {
+      return this.buildConfigNodes();
+    }
     return [];
+  }
+
+  private buildConfigNodes(): TreeNode[] {
+    return this.claudeSettings.map((configFile) => ({
+      kind: 'config' as const,
+      label: `Claude Code (${configFile.scope})`,
+      configFile,
+    }));
   }
 
   private buildAgentGroups(): TreeNode[] {
@@ -154,8 +174,8 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       bySource.set(sourceLabel, list);
     }
 
-    // Sort: Global first, then Claude, Proyecto, then rest
-    const order = ['Global', 'Claude', 'Proyecto', 'Ecosistema', 'Usuario'];
+    // Sort: Global first, then Claude, then project sources, then rest
+    const order = ['Global', 'Claude', 'Proyecto (OpenCode)', 'Proyecto (Claude)', 'Ecosistema', 'Usuario'];
     const groups: TreeNode[] = [];
 
     for (const key of order) {
@@ -207,7 +227,8 @@ export class MainTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const sourceMap: Record<string, string> = {
       Global: 'global',
       Claude: 'claude',
-      Proyecto: 'project',
+      'Proyecto (OpenCode)': 'project-opencode',
+      'Proyecto (Claude)': 'project-claude',
       Ecosistema: 'ecosystem',
       Usuario: 'user',
     };

@@ -36,7 +36,8 @@ function extractTriggers(description) {
 function skillSourceLabel(source) {
     const labels = {
         global: 'Global',
-        project: 'Proyecto',
+        'project-opencode': 'Proyecto (OpenCode)',
+        'project-claude': 'Proyecto (Claude)',
         ecosystem: 'Ecosistema',
         user: 'Usuario',
         claude: 'Claude',

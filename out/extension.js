@@ -39,6 +39,7 @@ const vscode = __importStar(require("vscode"));
 const MainTreeProvider_1 = require("./tree/MainTreeProvider");
 const QuickSearch_1 = require("./search/QuickSearch");
 const SkillDetailProvider_1 = require("./views/SkillDetailProvider");
+const ConfigDetailProvider_1 = require("./views/ConfigDetailProvider");
 const FileWatcher_1 = require("./discovery/FileWatcher");
 const ProjectDetector_1 = require("./discovery/ProjectDetector");
 /**
@@ -59,6 +60,19 @@ function unwrapSkill(arg) {
     }
     return undefined;
 }
+function unwrapConfig(arg) {
+    if (!arg)
+        return undefined;
+    if (typeof arg === 'object' && 'kind' in arg) {
+        const node = arg;
+        if (node.kind === 'config' && node.configFile)
+            return node.configFile;
+    }
+    if (typeof arg === 'object' && 'scope' in arg) {
+        return arg;
+    }
+    return undefined;
+}
 /**
  * Activate the extension — called by VS Code when activation events fire.
  */
@@ -74,9 +88,10 @@ function activate(context) {
     });
     context.subscriptions.push(treeView);
     // -----------------------------------------------------------------------
-    // Initialize the skill detail webview provider
+    // Initialize the detail webview providers
     // -----------------------------------------------------------------------
     const skillDetailProvider = new SkillDetailProvider_1.SkillDetailProvider();
+    const configDetailProvider = new ConfigDetailProvider_1.ConfigDetailProvider();
     // -----------------------------------------------------------------------
     // Initialize file watcher for auto-refresh
     // -----------------------------------------------------------------------
@@ -108,6 +123,14 @@ function activate(context) {
         }
     });
     context.subscriptions.push(showSkillDetailCmd);
+    // Show config detail (WebView) — invoked by left-click on config in tree
+    const showConfigDetailCmd = vscode.commands.registerCommand('vscodeAiContext.showConfigDetail', (arg) => {
+        const configFile = unwrapConfig(arg);
+        if (configFile) {
+            configDetailProvider.show(configFile);
+        }
+    });
+    context.subscriptions.push(showConfigDetailCmd);
     // Open skill file in editor — invoked by context menu
     const openSkillCmd = vscode.commands.registerCommand('vscodeAiContext.openSkillFile', (arg) => {
         const skill = unwrapSkill(arg);

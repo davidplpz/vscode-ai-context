@@ -59,7 +59,7 @@ function scanAllSkills(projectRoot) {
     ];
     // Project-specific skills
     if (projectRoot) {
-        locations.push({ dir: path.join(projectRoot, '.opencode', 'skills'), source: 'project' }, { dir: path.join(projectRoot, '.claude', 'skills'), source: 'project' });
+        locations.push({ dir: path.join(projectRoot, '.opencode', 'skills'), source: 'project-opencode' }, { dir: path.join(projectRoot, '.claude', 'skills'), source: 'project-claude' });
     }
     const seen = new Set();
     for (const { dir, source } of locations) {

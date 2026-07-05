@@ -39,6 +39,7 @@ const TreeNode_1 = require("./TreeNode");
 const Skill_1 = require("../model/Skill");
 const SkillScanner_1 = require("../discovery/SkillScanner");
 const AgentResolver_1 = require("../discovery/AgentResolver");
+const ClaudeSettingsResolver_1 = require("../discovery/ClaudeSettingsResolver");
 const ProjectDetector_1 = require("../discovery/ProjectDetector");
 /**
  * Main TreeDataProvider for the AI Context view.
@@ -48,6 +49,7 @@ class MainTreeProvider {
     onDidChangeTreeData = this._onDidChangeTreeData.event;
     skills = [];
     agents = [];
+    claudeSettings = [];
     projectRoot;
     constructor() {
         this.refresh();
@@ -58,8 +60,8 @@ class MainTreeProvider {
     refresh() {
         const project = (0, ProjectDetector_1.detectProject)();
         this.projectRoot = project?.rootPath;
-        // Only scan if project has opencode or we want global context
         this.skills = (0, SkillScanner_1.scanAllSkills)(this.projectRoot);
+        this.claudeSettings = (0, ClaudeSettingsResolver_1.resolveClaudeSettings)(this.projectRoot);
         this.agents = (0, AgentResolver_1.resolveAllAgents)({
             projectConfigPath: project?.configPath,
             includeHidden: false, // Skip hidden agents by default
@@ -121,10 +123,14 @@ class MainTreeProvider {
         };
     }
     buildCategories() {
-        return [
+        const categories = [
             { kind: 'category', label: '🤖 Agents', icon: 'robot' },
             { kind: 'category', label: '⚡ Skills', icon: 'light-bulb' },
         ];
+        if (this.claudeSettings.length > 0) {
+            categories.push({ kind: 'category', label: '⚙️ Config', icon: 'gear' });
+        }
+        return categories;
     }
     buildCategoryChildren(category) {
         if (category.label.includes('Agent')) {
@@ -133,7 +139,17 @@ class MainTreeProvider {
         if (category.label.includes('Skill')) {
             return this.buildSkillGroups();
         }
+        if (category.label.includes('Config')) {
+            return this.buildConfigNodes();
+        }
         return [];
+    }
+    buildConfigNodes() {
+        return this.claudeSettings.map((configFile) => ({
+            kind: 'config',
+            label: `Claude Code (${configFile.scope})`,
+            configFile,
+        }));
     }
     buildAgentGroups() {
         const primary = this.agents.filter((a) => a.mode === 'primary');
@@ -166,8 +182,8 @@ class MainTreeProvider {
             list.push(skill);
             bySource.set(sourceLabel, list);
         }
-        // Sort: Global first, then Claude, Proyecto, then rest
-        const order = ['Global', 'Claude', 'Proyecto', 'Ecosistema', 'Usuario'];
+        // Sort: Global first, then Claude, then project sources, then rest
+        const order = ['Global', 'Claude', 'Proyecto (OpenCode)', 'Proyecto (Claude)', 'Ecosistema', 'Usuario'];
         const groups = [];
         for (const key of order) {
             const items = bySource.get(key);
@@ -212,7 +228,8 @@ class MainTreeProvider {
         const sourceMap = {
             Global: 'global',
             Claude: 'claude',
-            Proyecto: 'project',
+            'Proyecto (OpenCode)': 'project-opencode',
+            'Proyecto (Claude)': 'project-claude',
             Ecosistema: 'ecosystem',
             Usuario: 'user',
         };

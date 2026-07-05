@@ -50,7 +50,8 @@ describe('Skill', () => {
   describe('skillSourceLabel', () => {
     it('returns labels for each source', () => {
       expect(skillSourceLabel('global')).toBe('Global');
-      expect(skillSourceLabel('project')).toBe('Proyecto');
+      expect(skillSourceLabel('project-opencode')).toBe('Proyecto (OpenCode)');
+      expect(skillSourceLabel('project-claude')).toBe('Proyecto (Claude)');
       expect(skillSourceLabel('ecosystem')).toBe('Ecosistema');
       expect(skillSourceLabel('user')).toBe('Usuario');
       expect(skillSourceLabel('claude')).toBe('Claude');

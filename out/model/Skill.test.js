@@ -45,7 +45,8 @@ const Skill_1 = require("./Skill");
     (0, vitest_1.describe)('skillSourceLabel', () => {
         (0, vitest_1.it)('returns labels for each source', () => {
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('global')).toBe('Global');
-            (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('project')).toBe('Proyecto');
+            (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('project-opencode')).toBe('Proyecto (OpenCode)');
+            (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('project-claude')).toBe('Proyecto (Claude)');
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('ecosystem')).toBe('Ecosistema');
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('user')).toBe('Usuario');
             (0, vitest_1.expect)((0, Skill_1.skillSourceLabel)('claude')).toBe('Claude');

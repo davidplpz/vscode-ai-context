@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Skill } from '../model/Skill';
 import { Agent } from '../model/Agent';
+import { ClaudeSettingsFile } from '../model/ClaudeSettings';
 
 /**
  * Discriminated union of all possible tree node types.
@@ -10,7 +11,8 @@ export type TreeNode =
   | CategoryNode
   | GroupNode
   | SkillNode
-  | AgentNode;
+  | AgentNode
+  | ConfigNode;
 
 /** Top-level root */
 export interface RootNode {
@@ -45,6 +47,13 @@ export interface AgentNode {
   agent: Agent;
 }
 
+/** A config/settings leaf node */
+export interface ConfigNode {
+  kind: 'config';
+  label: string;
+  configFile: ClaudeSettingsFile;
+}
+
 /**
  * Convert a TreeNode to a VS Code TreeItem.
  */
@@ -60,6 +69,8 @@ export function toTreeItem(node: TreeNode): vscode.TreeItem {
       return skillItem(node);
     case 'agent':
       return agentItem(node);
+    case 'config':
+      return configItem(node);
   }
 }
 
@@ -115,6 +126,25 @@ function skillItem(node: SkillNode): vscode.TreeItem {
     command: 'vscodeAiContext.showSkillDetail',
     title: 'Show Skill Detail',
     arguments: [node.skill],
+  };
+  return item;
+}
+
+function configItem(node: ConfigNode): vscode.TreeItem {
+  const item = new vscode.TreeItem(
+    node.label,
+    vscode.TreeItemCollapsibleState.None
+  );
+  item.contextValue = 'config';
+  item.iconPath = new vscode.ThemeIcon('gear');
+  item.tooltip = new vscode.MarkdownString(
+    `**${node.label}**\n\n*Path:* ${node.configFile.path}`
+  );
+  item.description = node.configFile.scope;
+  item.command = {
+    command: 'vscodeAiContext.showConfigDetail',
+    title: 'Show Config Detail',
+    arguments: [node.configFile],
   };
   return item;
 }

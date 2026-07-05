@@ -1,7 +1,7 @@
 /**
  * Skill source — where the SKILL.md file lives.
  */
-export type SkillSource = 'global' | 'project' | 'ecosystem' | 'user' | 'claude';
+export type SkillSource = 'global' | 'project-opencode' | 'project-claude' | 'ecosystem' | 'user' | 'claude';
 
 /**
  * A parsed AI Skill from a SKILL.md file.
@@ -75,7 +75,8 @@ export function extractTriggers(description: string): string[] {
 export function skillSourceLabel(source: SkillSource): string {
   const labels: Record<SkillSource, string> = {
     global: 'Global',
-    project: 'Proyecto',
+    'project-opencode': 'Proyecto (OpenCode)',
+    'project-claude': 'Proyecto (Claude)',
     ecosystem: 'Ecosistema',
     user: 'Usuario',
     claude: 'Claude',

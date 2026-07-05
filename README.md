@@ -1,6 +1,6 @@
 # AI Context
 
-Browse, search, and inspect [opencode](https://opencode.ai) AI Skills and Agents directly from your VS Code editor.
+Browse, search, and inspect [opencode](https://opencode.ai) and [Claude Code](https://docs.anthropic.com/en/docs/claude-code/) AI Skills and Agents directly from your VS Code editor.
 
 ## Features
 
@@ -8,10 +8,11 @@ Browse, search, and inspect [opencode](https://opencode.ai) AI Skills and Agents
 
 Discover all available AI Skills and Agents in a tree view organized by source and category:
 
-- **Global Skills** — installed in `~/.config/opencode/skills/`
-- **Project Skills** — local to your workspace
+- **Global Skills** — installed in `~/.config/opencode/skills/` or `~/.claude/skills/`
+- **Project Skills** — local to your workspace (labeled by origin: OpenCode or Claude)
 - **Ecosystem Skills** — from the opencode registry
 - **User Skills** — custom user-defined skills
+- **Claude Code Config** — view parsed `.claude/settings.json` (model, permissions, denied agents)
 - **Agents** — configured in `opencode.json(c)`
 
 ### Rich Skill Details
@@ -32,8 +33,8 @@ Right-click any skill to open the source file or copy its content.
 
 ## Requirements
 
-- [opencode](https://opencode.ai) installed and configured
-- Skills discovered from `~/.config/opencode/skills/` (global) or your project's `.opencode/` directory
+- [opencode](https://opencode.ai) and/or [Claude Code](https://docs.anthropic.com/en/docs/claude-code/) installed and configured
+- Skills discovered from global directories (`~/.config/opencode/skills/`, `~/.claude/skills/`, etc.) or your project's `.opencode/` / `.claude/` directories
 
 ## Extension Settings
 
@@ -45,6 +46,13 @@ This extension does not add any user-configurable settings yet.
 - Refresh is required after adding new global skills (auto-refresh is project-only)
 
 ## Release Notes
+
+### 0.1.4
+
+- Added: Project skills now show whether they come from OpenCode or Claude Code in the tree
+- Added: Claude Code settings support — reads `.claude/settings.json` (global and project)
+- Added: New "Config" category in the tree with detail WebView for Claude settings
+- Added: `claude-code` keyword to package metadata
 
 ### 0.1.3
 
